@@ -42,7 +42,8 @@ exports.analyzeSymptoms = async (req, res) => {
         }
 
         // --- Real AI Logic ---
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        // Using gemini-flash-latest as 1.5-flash 404s and 2.0-flash 429s (quota)
+        const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 
         const prompt = `
         Act as a medical assistant. Analyze these symptoms: "${symptoms.join(', ')}".
