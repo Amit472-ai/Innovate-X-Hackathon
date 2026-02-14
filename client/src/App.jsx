@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { analyzeSymptoms } from './services/api';
 import Header from './components/Header';
 import Disclaimer from './components/Disclaimer';
 import SymptomForm from './components/SymptomForm';
@@ -18,9 +18,8 @@ function AppContent() {
     setError(null);
     setSearched(true);
     try {
-      // Assuming server is running on localhost:5000
-      const response = await axios.post('http://localhost:5000/api/analyze', { symptoms });
-      setResults(response.data.results || []);
+      const data = await analyzeSymptoms(symptoms);
+      setResults(data.results || []);
     } catch (err) {
       console.error("API Error:", err);
       setError('Failed to analyze symptoms. Please try again or check your connection.');
