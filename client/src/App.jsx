@@ -15,6 +15,9 @@ import DoctorLocator from './components/DoctorLocator';
 import BMICalculator from './components/BMICalculator';
 import Features from './components/Features';
 import BMILottie from './Animations/BMI.json';
+import WaterTracker from './components/WaterTracker';
+import CalorieTracker from './components/CalorieTracker';
+import HowItWorks from './components/HowItWorks';
 
 function Home() {
   const { t } = useLanguage();
@@ -84,8 +87,25 @@ function Home() {
         </div>
       </section>
 
+      {/* Health Trackers Section */}
+      <section className="container mx-auto px-4 py-12 bg-blue-50/50 rounded-3xl mb-12">
+        <div className="text-center mb-10">
+          <span className="text-blue-600 font-bold tracking-wider uppercase text-sm">Daily Tracking</span>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mt-2">Monitor Your Daily Habits</h2>
+          <p className="text-slate-500 mt-4 max-w-2xl mx-auto">Keep track of your hydration and nutrition to maintain a healthy lifestyle.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <WaterTracker />
+          <CalorieTracker />
+        </div>
+      </section>
+
       {/* Features Section */}
       <Features />
+
+      {/* How It Works Section */}
+      <HowItWorks />
 
       {showLocator && <DoctorLocator onClose={() => setShowLocator(false)} />}
 

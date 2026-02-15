@@ -1,6 +1,6 @@
 
 import React from 'react';
-
+// Force update
 const features = [
   {
     icon: '🤖',
@@ -26,6 +26,16 @@ const features = [
     icon: '🌐',
     title: 'Multilingual Support',
     desc: 'Interact in your preferred language for a more comfortable experience.'
+  },
+  {
+    icon: '💧',
+    title: 'Smart Hydration',
+    desc: 'Track your daily water intake and stay hydrated with visual progress goals.'
+  },
+  {
+    icon: '🔥',
+    title: 'Calorie Tracking',
+    desc: 'Monitor your daily calories and log food intake to maintain your diet.'
   },
   {
     icon: '📱',
