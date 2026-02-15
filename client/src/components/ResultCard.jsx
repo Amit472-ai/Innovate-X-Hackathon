@@ -11,43 +11,58 @@ const ResultCard = ({ result }) => {
     const displayAdvice = language === 'hi' && advice_hi ? advice_hi : advice;
 
     const severityMap = {
-        Low: { color: 'text-green-800', bg: 'bg-green-100', border: 'border-green-200', icon: '🟢' },
-        Medium: { color: 'text-yellow-800', bg: 'bg-yellow-100', border: 'border-yellow-200', icon: '🟡' },
-        High: { color: 'text-orange-800', bg: 'bg-orange-100', border: 'border-orange-200', icon: '🟠' },
-        Critical: { color: 'text-red-800', bg: 'bg-red-100', border: 'border-red-200', icon: '🔴' }
+        Low: { color: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-200', icon: '🟢', label: 'Low Risk' },
+        Medium: { color: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-200', icon: '🟡', label: 'Medium Risk' },
+        High: { color: 'text-orange-700', bg: 'bg-orange-50', border: 'border-orange-200', icon: '🟠', label: 'High Risk' },
+        Critical: { color: 'text-rose-700', bg: 'bg-rose-50', border: 'border-rose-200', icon: '🔴', label: 'Critical' }
     };
 
     const styles = severityMap[severity] || severityMap.Low;
 
     return (
-        <div className={`p-5 mb-4 border rounded-xl shadow-sm bg-white transition-all duration-300 hover:shadow-md animate-fade-in`}>
-            <div className="flex flex-col sm:flex-row justify-between items-start gap-2 mb-3">
-                <h3 className="text-xl font-bold text-gray-900 leading-tight">{displayCondition}</h3>
-                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide flex items-center gap-1 ${styles.bg} ${styles.color}`}>
-                    <span>{styles.icon}</span> {t.risk}: {displaySeverity}
-                </span>
-            </div>
+        <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-in group">
+            <div className={`h-1.5 w-full bg-gradient-to-r ${severity === 'Critical' ? 'from-rose-500 to-red-600' :
+                    severity === 'High' ? 'from-orange-400 to-orange-600' :
+                        severity === 'Medium' ? 'from-amber-400 to-yellow-500' :
+                            'from-emerald-400 to-green-600'
+                }`}></div>
 
-            <p className="text-gray-700 mb-4 leading-relaxed">{displayDescription}</p>
-
-            <div className="bg-blue-50/50 p-4 rounded-lg border border-blue-100 mb-2">
-                <h4 className="font-semibold text-blue-900 text-sm mb-2 flex items-center gap-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    {t.whatToDo}
-                </h4>
-                <p className="text-blue-800 text-sm">{displayAdvice}</p>
-            </div>
-
-            {matchParams && matchParams.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                    <span className="text-gray-500 py-1">{t.matchedSymptoms}:</span>
-                    {matchParams.map((sym, i) => (
-                        <span key={i} className="bg-gray-100 text-gray-600 px-2 py-1 rounded-md border border-gray-200">
-                            {sym}
-                        </span>
-                    ))}
+            <div className="p-6">
+                <div className="flex flex-col sm:flex-row justify-between items-start gap-3 mb-4">
+                    <h3 className="text-xl font-bold text-slate-800 leading-tight group-hover:text-blue-600 transition-colors">
+                        {displayCondition}
+                    </h3>
+                    <span className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide flex items-center gap-1.5 border ${styles.bg} ${styles.color} ${styles.border}`}>
+                        <span className="text-[10px]">{styles.icon}</span>
+                        {language === 'hi' ? displaySeverity : (styles.label || displaySeverity)}
+                    </span>
                 </div>
-            )}
+
+                <p className="text-slate-600 mb-6 leading-relaxed text-sm lg:text-base">
+                    {displayDescription}
+                </p>
+
+                <div className="bg-blue-50/60 p-5 rounded-xl border border-blue-100/50 mb-4">
+                    <h4 className="font-semibold text-blue-900 text-sm mb-2 flex items-center gap-2">
+                        <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        {t.whatToDo}
+                    </h4>
+                    <p className="text-blue-800 text-sm leading-relaxed">
+                        {displayAdvice}
+                    </p>
+                </div>
+
+                {matchParams && matchParams.length > 0 && (
+                    <div className="pt-4 border-t border-slate-50 flex flex-wrap gap-2 text-xs">
+                        <span className="text-slate-400 py-1 font-medium">{t.matchedSymptoms}:</span>
+                        {matchParams.map((sym, i) => (
+                            <span key={i} className="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md border border-slate-200">
+                                {sym}
+                            </span>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

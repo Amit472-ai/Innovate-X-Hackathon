@@ -1,71 +1,95 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
 
 const Login = () => {
-    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const { login } = useAuth();
-    // const navigate = useNavigate(); // Add Router later if needed, for now simple conditional rendering or window location
-
-    const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await login(formData.email, formData.password);
+        setError('');
+        setLoading(true);
+        const res = await login(email, password);
+        setLoading(false);
         if (res.success) {
-            window.location.href = '/'; // Simple redirect for now
+            navigate('/');
         } else {
             setError(res.error);
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-md">
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
-                </div>
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    {error && <div className="text-red-500 text-center text-sm">{error}</div>}
-                    <div className="rounded-md shadow-sm -space-y-px">
-                        <div>
-                            <input
-                                name="email"
-                                type="email"
-                                required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                                placeholder="Email address"
-                                value={formData.email}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div>
-                            <input
-                                name="password"
-                                type="password"
-                                required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                                placeholder="Password"
-                                value={formData.password}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </div>
+        <div className="min-h-screen bg-slate-50 flex flex-col relative overflow-hidden">
+            <Header />
 
-                    <div>
+            {/* Background Elements */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+                <div className="absolute top-1/4 -right-20 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
+                <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float" style={{ animationDelay: '2s' }}></div>
+            </div>
+
+            <div className="flex-grow flex items-center justify-center p-4 mt-16">
+                <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-white/50 relative overflow-hidden animate-fade-in">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+
+                    <h2 className="text-3xl font-bold text-center mb-2 text-slate-800">Welcome Back</h2>
+                    <p className="text-center text-slate-500 mb-8">Sign in to access your health history</p>
+
+                    {error && (
+                        <div className="bg-red-50 text-red-600 p-4 rounded-xl mb-6 text-sm flex items-center gap-2 border border-red-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            {error}
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <div className="space-y-1">
+                            <label className="text-sm font-semibold text-slate-600 ml-1">Email Address</label>
+                            <input
+                                type="email"
+                                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-slate-700 bg-slate-50 focus:bg-white"
+                                placeholder="name@example.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label className="text-sm font-semibold text-slate-600 ml-1">Password</label>
+                            <input
+                                type="password"
+                                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-slate-700 bg-slate-50 focus:bg-white"
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+
                         <button
                             type="submit"
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            disabled={loading}
+                            className={`w-full py-3.5 rounded-xl text-white font-bold text-lg shadow-lg hover:shadow-blue-500/25 transition-all duration-300 transform hover:-translate-y-0.5
+                                ${loading ? 'bg-slate-300 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'}`}
                         >
-                            Sign in
+                            {loading ? 'Signing in...' : 'Sign In'}
                         </button>
-                    </div>
-                </form>
-                <div className="text-center">
-                    <a href="/register" className="font-medium text-blue-600 hover:text-blue-500">
-                        Don't have an account? Sign up
-                    </a>
+                    </form>
+
+                    <p className="mt-8 text-center text-slate-500 text-sm">
+                        Don't have an account?{' '}
+                        <Link to="/register" className="text-blue-600 font-bold hover:text-blue-800 transition-colors">
+                            Sign up
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>
