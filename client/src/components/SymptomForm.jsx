@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import VoiceInput from './VoiceInput';
 
 const SymptomForm = ({ onAnalyze, loading }) => {
     const [input, setInput] = useState('');
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
+
+    const handleSpeechInput = (text) => {
+        if (input) {
+            setInput(prev => `${prev}, ${text}`);
+        } else {
+            setInput(text);
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -27,8 +36,11 @@ const SymptomForm = ({ onAnalyze, loading }) => {
                         onChange={(e) => setInput(e.target.value)}
                         disabled={loading}
                     />
-                    <div className="absolute bottom-3 right-3 text-xs text-gray-400 pointer-events-none">
-                        Correct: "Fever, headache, cough"
+                    <div className="absolute bottom-3 right-3 flex items-center gap-2">
+                        <VoiceInput
+                            onSpeechInput={handleSpeechInput}
+                            lang={language === 'hi' ? 'hi-IN' : 'en-US'}
+                        />
                     </div>
                 </div>
 
