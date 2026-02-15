@@ -12,6 +12,10 @@ import Profile from './pages/Profile';
 import ChatBot from './pages/ChatBot';
 import DoctorLocator from './components/DoctorLocator';
 
+import BMICalculator from './components/BMICalculator';
+import Features from './components/Features';
+import BMILottie from './Animations/BMI.json';
+
 function Home() {
   const { t } = useLanguage();
   const [showLocator, setShowLocator] = useState(false);
@@ -64,6 +68,24 @@ function Home() {
           </div>
         </div>
       </main>
+
+
+      {/* BMI Section with Animation */}
+      <section className="container mx-auto px-4 py-12 flex flex-col md:flex-row items-center gap-8">
+        {/* BMI Animation on the left */}
+        <div className="w-full md:w-1/2 flex justify-center items-center">
+          <div className="w-full max-w-md md:max-w-lg lg:max-w-xl animate-float bg-white rounded-xl shadow p-6">
+            <Lottie animationData={BMILottie} loop={true} />
+          </div>
+        </div>
+        {/* BMI Calculator on the right */}
+        <div className="w-full md:w-1/2">
+          <BMICalculator />
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <Features />
 
       {showLocator && <DoctorLocator onClose={() => setShowLocator(false)} />}
 
