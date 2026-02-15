@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { analyzeSymptoms } from './services/api';
 import Header from './components/Header';
 import Disclaimer from './components/Disclaimer';
@@ -7,14 +8,21 @@ import ResultCard from './components/ResultCard';
 import SkeletonLoader from './components/SkeletonLoader';
 import DoctorLocator from './components/DoctorLocator';
 import { useLanguage } from './context/LanguageContext';
+import { useAuth } from './context/AuthContext';
+import axios from 'axios';
 
-function AppContent() {
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Profile from './pages/Profile';
+
+function Home() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searched, setSearched] = useState(false);
   const [showLocator, setShowLocator] = useState(false);
   const { t } = useLanguage();
+  const { user } = useAuth();
 
   const handleAnalyze = async (symptoms) => {
     setLoading(true);
@@ -24,9 +32,20 @@ function AppContent() {
     try {
       const data = await analyzeSymptoms(symptoms);
       setResults(data.results || []);
-      if (data.isOffline) {
-        // Optional: Toast or small notification that results are from offline database
+
+      // Save to History if Logged In
+      if (user && data.results && data.results.length > 0) {
+        try {
+          await axios.post('http://localhost:5000/api/history', {
+            symptoms: symptoms,
+            analysis: data.results
+          });
+          // console.log("Report saved to history");
+        } catch (saveError) {
+          console.error("Failed to save history:", saveError);
+        }
       }
+
     } catch (err) {
       console.error("API Error:", err);
       setError('Failed to analyze symptoms. Please try again or check your connection.');
@@ -108,7 +127,14 @@ function AppContent() {
 }
 
 function App() {
-  return <AppContent />;
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/profile" element={<Profile />} />
+    </Routes>
+  );
 }
 
 export default App;
