@@ -5,6 +5,7 @@ import Disclaimer from './components/Disclaimer';
 import SymptomForm from './components/SymptomForm';
 import ResultCard from './components/ResultCard';
 import SkeletonLoader from './components/SkeletonLoader';
+import DoctorLocator from './components/DoctorLocator';
 import { useLanguage } from './context/LanguageContext';
 
 function AppContent() {
@@ -12,6 +13,7 @@ function AppContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searched, setSearched] = useState(false);
+  const [showLocator, setShowLocator] = useState(false);
   const { t } = useLanguage();
 
   const handleAnalyze = async (symptoms) => {
@@ -58,6 +60,20 @@ function AppContent() {
           You are currently offline. Using limited local database.
         </div>
       )}
+
+      {/* Floating Action Button for Locator */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <button
+          onClick={() => setShowLocator(true)}
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-full shadow-lg transition-transform hover:scale-105"
+        >
+          <span className="text-xl">🏥</span>
+          <span className="font-medium hidden md:inline">Find Nearby Help</span>
+        </button>
+      </div>
+
+      {showLocator && <DoctorLocator onClose={() => setShowLocator(false)} />}
+
       <main className="container mx-auto p-4 max-w-3xl mt-4">
         <Disclaimer />
 

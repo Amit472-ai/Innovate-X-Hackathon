@@ -7,11 +7,13 @@
 - **Multilingual Support 🇮🇳**: Toggle between **English** and **Hindi** for full interface and medical advice translation.
 - **AI-Powered Analysis 🤖**: Uses **Google Gemini AI** to understand vague symptoms and provide accurate insights.
 - **Offline Mode (PWA) 📶**: Works without internet access using a local database of conditions.
+- **Nearby Doctor Locator 🏥**: Finds hospitals and clinics within 5km using your current location (powered by OpenStreetMap).
 - **Risk Assessment**: Color-coded risk levels (Low, Medium, High, Critical) to guide urgency.
 - **Responsive Design**: Mobile-friendly interface built with Tailwind CSS v4.
 
 ## 🛠️ Tech Stack
 - **Frontend**: React (Vite), Tailwind CSS v4, PWA
+- **Maps**: Leaflet, OpenStreetMap Overpass API
 - **Backend**: Node.js, Express, MongoDB
 - **AI**: Google Gemini API
 
@@ -20,8 +22,6 @@ The following features are planned for the next phase of development:
 
 - [ ] **Voice Support (Speech-to-Text) 🎤**
     - Allow users to speak their symptoms instead of typing, making it accessible for users with low literacy.
-- [ ] **Doctor & Hospital Locator 🏥**
-    - Integrate Google Maps API to show the nearest clinics/hospitals based on the user's location, especially for "High" risk results.
 - [ ] **User History & Profiles**
     - Allow users to save their health reports and track symptoms over time.
 
