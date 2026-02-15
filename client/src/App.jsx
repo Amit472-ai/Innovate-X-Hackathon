@@ -53,7 +53,23 @@ function Home() {
 
         <SymptomForm onAnalyze={analyze} loading={loading} />
 
-        {error && (
+        {error === 'LIMIT_REACHED' ? (
+          <div className="p-8 mb-8 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm text-center animate-fade-in">
+            <div className="text-4xl mb-3">🔒</div>
+            <h3 className="text-xl font-bold text-blue-900 mb-2">Free Limit Reached</h3>
+            <p className="text-blue-700 mb-6 max-w-md mx-auto">
+              You've used your 3 free analyses. Please login or create an account to continue using SwasthyaSahayak for free.
+            </p>
+            <div className="flex justify-center gap-4">
+              <a href="/login" className="px-6 py-2.5 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30">
+                Login
+              </a>
+              <a href="/register" className="px-6 py-2.5 bg-white text-blue-600 font-semibold rounded-xl border border-blue-200 hover:bg-blue-50 transition-colors">
+                Sign Up
+              </a>
+            </div>
+          </div>
+        ) : error && (
           <div className="p-4 mb-8 text-rose-700 bg-rose-50 rounded-xl border border-rose-100 shadow-sm animate-fade-in flex items-center gap-3">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
