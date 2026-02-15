@@ -25,9 +25,9 @@ const Header = () => {
                     {user ? (
                         <Link to="/profile" className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full hover:bg-slate-100 transition-colors">
                             <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">
-                                {user.name.charAt(0).toUpperCase()}
+                                {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
                             </div>
-                            <span className="text-sm font-medium text-slate-700">{user.name.split(' ')[0]}</span>
+                            <span className="text-sm font-medium text-slate-700">{user.name ? user.name.split(' ')[0] : 'User'}</span>
                         </Link>
                     ) : (
                         <Link to="/login" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors px-3 py-2">
@@ -46,7 +46,7 @@ const Header = () => {
                     {/* Mobile Profile Icon (only if logged in) */}
                     {user && (
                         <Link to="/profile" className="md:hidden w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">
-                            {user.name.charAt(0).toUpperCase()}
+                            {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
                         </Link>
                     )}
                 </div>

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import Input from '../components/ui/Input';
+import Button from '../components/ui/Button';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -52,48 +54,39 @@ const Register = () => {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-5">
-                        <div className="space-y-1">
-                            <label className="text-sm font-semibold text-slate-600 ml-1">Full Name</label>
-                            <input
-                                type="text"
-                                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-700 bg-slate-50 focus:bg-white"
-                                placeholder="John Doe"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="space-y-1">
-                            <label className="text-sm font-semibold text-slate-600 ml-1">Email Address</label>
-                            <input
-                                type="email"
-                                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-700 bg-slate-50 focus:bg-white"
-                                placeholder="name@example.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="space-y-1">
-                            <label className="text-sm font-semibold text-slate-600 ml-1">Password</label>
-                            <input
-                                type="password"
-                                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-700 bg-slate-50 focus:bg-white"
-                                placeholder="••••••••"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </div>
+                        <Input
+                            label="Full Name"
+                            type="text"
+                            placeholder="John Doe"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                        <Input
+                            label="Email Address"
+                            type="email"
+                            placeholder="name@example.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <Input
+                            label="Password"
+                            type="password"
+                            placeholder="••••••••"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
 
-                        <button
+                        <Button
                             type="submit"
                             disabled={loading}
-                            className={`w-full py-3.5 rounded-xl text-white font-bold text-lg shadow-lg hover:shadow-indigo-500/25 transition-all duration-300 transform hover:-translate-y-0.5
-                                ${loading ? 'bg-slate-300 cursor-not-allowed' : 'bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700'}`}
+                            variant="secondary"
+                            className="w-full"
                         >
                             {loading ? 'Creating Account...' : 'Sign Up'}
-                        </button>
+                        </Button>
                     </form>
 
                     <p className="mt-8 text-center text-slate-500 text-sm">

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { analyzeSymptoms } from './services/api';
+import useConnectivity from './hooks/useConnectivity';
+import useSymptomAnalysis from './hooks/useSymptomAnalysis';
 import Header from './components/Header';
 import Disclaimer from './components/Disclaimer';
 import SymptomForm from './components/SymptomForm';
@@ -9,7 +10,6 @@ import SkeletonLoader from './components/SkeletonLoader';
 import DoctorLocator from './components/DoctorLocator';
 import { useLanguage } from './context/LanguageContext';
 import { useAuth } from './context/AuthContext';
-import axios from 'axios';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -17,60 +17,10 @@ import Profile from './pages/Profile';
 import Hero from './components/Hero';
 
 function Home() {
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [searched, setSearched] = useState(false);
-  const [showLocator, setShowLocator] = useState(false);
   const { t } = useLanguage();
-  const { user } = useAuth();
-
-  const handleAnalyze = async (symptoms) => {
-    setLoading(true);
-    setError(null);
-    setSearched(true);
-    setResults([]); // Clear previous results immediately
-    try {
-      const data = await analyzeSymptoms(symptoms);
-      setResults(data.results || []);
-
-      // Save to History if Logged In
-      if (user && data.results && data.results.length > 0) {
-        try {
-          await axios.post('http://localhost:5000/api/history', {
-            symptoms: symptoms,
-            analysis: data.results
-          });
-          // console.log("Report saved to history");
-        } catch (saveError) {
-          console.error("Failed to save history:", saveError);
-        }
-      }
-
-    } catch (err) {
-      console.error("API Error:", err);
-      setError('Failed to analyze symptoms. Please try again or check your connection.');
-      setResults([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const [isOffline, setIsOffline] = useState(!navigator.onLine);
-
-  React.useEffect(() => {
-    const handleStatusChange = () => {
-      setIsOffline(!navigator.onLine);
-    };
-
-    window.addEventListener('online', handleStatusChange);
-    window.addEventListener('offline', handleStatusChange);
-
-    return () => {
-      window.removeEventListener('online', handleStatusChange);
-      window.removeEventListener('offline', handleStatusChange);
-    };
-  }, []);
+  const isOffline = useConnectivity();
+  const { results, loading, error, searched, analyze, clearSearch } = useSymptomAnalysis();
+  const [showLocator, setShowLocator] = useState(false);
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-12 selection:bg-blue-100 selection:text-blue-900">
@@ -101,7 +51,7 @@ function Home() {
       <main className="container mx-auto p-4 max-w-3xl -mt-8 relative z-10">
         {!searched && <Disclaimer />}
 
-        <SymptomForm onAnalyze={handleAnalyze} loading={loading} />
+        <SymptomForm onAnalyze={analyze} loading={loading} />
 
         {error && (
           <div className="p-4 mb-8 text-rose-700 bg-rose-50 rounded-xl border border-rose-100 shadow-sm animate-fade-in flex items-center gap-3">
@@ -120,7 +70,7 @@ function Home() {
             <h3 className="text-xl font-bold text-slate-800 mb-2">No Matches Found</h3>
             <p className="text-slate-500 max-w-md mx-auto">{t.noMatch || "We couldn't identify a condition matching those symptoms. Try describing them differently."}</p>
             <button
-              onClick={() => setSearched(false)}
+              onClick={clearSearch}
               className="mt-6 text-blue-600 font-semibold hover:text-blue-800 transition-colors"
             >
               Clear Search
