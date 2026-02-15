@@ -222,7 +222,7 @@ class AIService {
     _getFallbackAnalysis(symptoms) {
         const timestamp = new Date().toISOString();
         console.log(`[${timestamp}] Generating fallback for symptoms: ${symptoms.join(', ')}`);
-        
+
         let mockData = [
             {
                 condition: "General Fatigue",
@@ -289,7 +289,7 @@ class AIService {
                 advice_hi: "हल्का खाना, अदरक की चाय। अगर खून वाली उल्टी तो तुरंत डॉक्टर।"
             });
         }
-        
+
         return mockData.slice(0, 3).map(addDisclaimer);  // Limit to 3
     }
 

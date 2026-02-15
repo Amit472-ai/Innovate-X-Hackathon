@@ -1,116 +1,75 @@
 import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
-import useConnectivity from './hooks/useConnectivity';
-import useSymptomAnalysis from './hooks/useSymptomAnalysis';
+import { Routes, Route, Link } from 'react-router-dom';
 import Header from './components/Header';
-import Disclaimer from './components/Disclaimer';
-import SymptomForm from './components/SymptomForm';
-import ResultCard from './components/ResultCard';
-import SkeletonLoader from './components/SkeletonLoader';
-import DoctorLocator from './components/DoctorLocator';
 import { useLanguage } from './context/LanguageContext';
 import { useAuth } from './context/AuthContext';
+import Lottie from 'lottie-react';
+import doctorAnimation from './Animations/doctor.json';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
-import Hero from './components/Hero';
+import ChatBot from './pages/ChatBot';
+import DoctorLocator from './components/DoctorLocator';
 
 function Home() {
   const { t } = useLanguage();
-  const isOffline = useConnectivity();
-  const { results, loading, error, searched, analyze, clearSearch } = useSymptomAnalysis();
   const [showLocator, setShowLocator] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-12 selection:bg-blue-100 selection:text-blue-900">
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-blue-100 selection:text-blue-900 flex flex-col">
       <Header />
 
-      {isOffline && (
-        <div className="bg-amber-100 border-l-4 border-amber-500 text-amber-700 p-4 text-center text-sm font-medium animate-fade-in fixed top-[64px] w-full z-40 shadow-sm">
-          <p>You are currently offline. Using limited local database.</p>
-        </div>
-      )}
-
-      {/* Hero Section (Only show when no results and not searching) */}
-      {!searched && results.length === 0 && <Hero />}
-
-      {/* Floating Action Button for Locator */}
-      <div className="fixed bottom-8 right-8 z-40">
-        <button
-          onClick={() => setShowLocator(true)}
-          className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-4 rounded-full shadow-lg shadow-blue-600/30 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group"
-        >
-          <span className="text-2xl group-hover:animate-bounce">🏥</span>
-          <span className="font-bold hidden md:inline">Find Nearby Help</span>
-        </button>
-      </div>
-
-      {showLocator && <DoctorLocator onClose={() => setShowLocator(false)} />}
-
-      <main className="container mx-auto p-4 max-w-3xl -mt-8 relative z-10">
-        {!searched && <Disclaimer />}
-
-        <SymptomForm onAnalyze={analyze} loading={loading} />
-
-        {error === 'LIMIT_REACHED' ? (
-          <div className="p-8 mb-8 bg-blue-50 rounded-2xl border border-blue-100 shadow-sm text-center animate-fade-in">
-            <div className="text-4xl mb-3">🔒</div>
-            <h3 className="text-xl font-bold text-blue-900 mb-2">Free Limit Reached</h3>
-            <p className="text-blue-700 mb-6 max-w-md mx-auto">
-              You've used your 3 free analyses. Please login or create an account to continue using SwasthyaSahayak for free.
-            </p>
-            <div className="flex justify-center gap-4">
-              <a href="/login" className="px-6 py-2.5 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30">
-                Login
-              </a>
-              <a href="/register" className="px-6 py-2.5 bg-white text-blue-600 font-semibold rounded-xl border border-blue-200 hover:bg-blue-50 transition-colors">
-                Sign Up
-              </a>
-            </div>
+      <main className="flex-1 container mx-auto px-4 flex flex-col md:flex-row items-center justify-center pt-20">
+        {/* Left Side: Heading and Text */}
+        <div className="w-full md:w-1/2 p-4 md:p-12 text-center md:text-left z-10">
+          <div className="inline-block px-4 py-1.5 mb-6 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-medium animate-fade-in">
+            ✨ Your Personal AI Health Assistant
           </div>
-        ) : error && (
-          <div className="p-4 mb-8 text-rose-700 bg-rose-50 rounded-xl border border-rose-100 shadow-sm animate-fade-in flex items-center gap-3">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <p className="font-medium">{error}</p>
-          </div>
-        )}
+          <h1 className="text-4xl md:text-6xl font-bold text-slate-800 mb-6 leading-tight animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            Identify Symptoms with <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+              AI Precision
+            </span>
+          </h1>
+          <p className="text-lg text-slate-500 mb-8 max-w-lg mx-auto md:mx-0 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            Describe how you feel, and get instant insights into possible conditions, severity, and advice. Fast, private, and powered by advanced AI.
+          </p>
 
-        {loading && <SkeletonLoader />}
-
-        {searched && !loading && results.length === 0 && !error && (
-          <div className="p-12 text-center bg-white rounded-2xl shadow-sm border border-slate-100 animate-fade-in">
-            <div className="text-6xl mb-4 opacity-50">🔍</div>
-            <h3 className="text-xl font-bold text-slate-800 mb-2">No Matches Found</h3>
-            <p className="text-slate-500 max-w-md mx-auto">{t.noMatch || "We couldn't identify a condition matching those symptoms. Try describing them differently."}</p>
-            <button
-              onClick={clearSearch}
-              className="mt-6 text-blue-600 font-semibold hover:text-blue-800 transition-colors"
+          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start animate-fade-in" style={{ animationDelay: '0.3s' }}>
+            <Link
+              to="/chatbot"
+              className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-blue-500/30 hover:bg-blue-700 hover:scale-105 transition-all duration-300"
             >
-              Clear Search
+              <span>Start Symptom Check</span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </Link>
+
+            <button
+              onClick={() => setShowLocator(true)}
+              className="inline-flex items-center justify-center gap-2 bg-white text-slate-700 border border-slate-200 px-8 py-4 rounded-xl font-bold text-lg hover:bg-slate-50 hover:border-slate-300 transition-all duration-300"
+            >
+              <span>Find Nearby Help</span>
+              <span className="text-xl">🏥</span>
             </button>
           </div>
-        )}
+        </div>
 
-        <div className="space-y-6">
-          {results.map((result, index) => (
-            <ResultCard key={index} result={result} />
-          ))}
+        {/* Right Side: Doctor Animation */}
+        <div className="w-full md:w-1/2 p-4 md:p-8 flex justify-center items-center">
+          <div className="w-full max-w-md md:max-w-lg lg:max-w-xl animate-float">
+            <Lottie animationData={doctorAnimation} loop={true} />
+          </div>
         </div>
       </main>
 
-      {!searched && (
-        <footer className="text-center p-8 text-slate-400 text-sm mt-12 bg-white border-t border-slate-100">
-          <p>&copy; {new Date().getFullYear()} SwasthyaSahayak. All rights reserved.</p>
-          <div className="flex justify-center gap-4 mt-2">
-            <a href="#" className="hover:text-blue-500 transition-colors">Privacy</a>
-            <a href="#" className="hover:text-blue-500 transition-colors">Terms</a>
-            <a href="#" className="hover:text-blue-500 transition-colors">About</a>
-          </div>
-        </footer>
-      )}
+      {showLocator && <DoctorLocator onClose={() => setShowLocator(false)} />}
+
+      <footer className="text-center p-6 text-slate-400 text-sm bg-white border-t border-slate-100">
+        <p>&copy; {new Date().getFullYear()} SwasthyaSahayak. All rights reserved.</p>
+      </footer>
     </div>
   );
 }
@@ -122,6 +81,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/chatbot" element={<ChatBot />} />
     </Routes>
   );
 }
