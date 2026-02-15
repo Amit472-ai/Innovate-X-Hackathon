@@ -38,9 +38,16 @@ The following features are planned for the next phase of development:
     npm run seed # To populate database
     npm start
     ```
-3.  **Frontend Setup**
-    ```bash
-    cd client
-    npm install
-    npm run dev
-    ```
+### 3. Generate Offline Data
+To enable offline capabilities, you must generate the local data file:
+```bash
+cd server
+node scripts/exportOfflineData.js
+```
+
+### 4. Run the Client
+```bash
+cd client
+npm install
+npm run dev
+```

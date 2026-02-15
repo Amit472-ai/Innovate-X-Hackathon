@@ -22,6 +22,9 @@ function AppContent() {
     try {
       const data = await analyzeSymptoms(symptoms);
       setResults(data.results || []);
+      if (data.isOffline) {
+        // Optional: Toast or small notification that results are from offline database
+      }
     } catch (err) {
       console.error("API Error:", err);
       setError('Failed to analyze symptoms. Please try again or check your connection.');
@@ -31,9 +34,30 @@ function AppContent() {
     }
   };
 
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
+  React.useEffect(() => {
+    const handleStatusChange = () => {
+      setIsOffline(!navigator.onLine);
+    };
+
+    window.addEventListener('online', handleStatusChange);
+    window.addEventListener('offline', handleStatusChange);
+
+    return () => {
+      window.removeEventListener('online', handleStatusChange);
+      window.removeEventListener('offline', handleStatusChange);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-gray-900 pb-12">
       <Header />
+      {isOffline && (
+        <div className="bg-yellow-500 text-white text-center py-1 px-4 text-sm font-medium animate-fade-in">
+          You are currently offline. Using limited local database.
+        </div>
+      )}
       <main className="container mx-auto p-4 max-w-3xl mt-4">
         <Disclaimer />
 

@@ -1,0 +1,145 @@
+[
+  {
+    "name": "Common Cold",
+    "symptoms": [
+      "runny nose",
+      "sneezing",
+      "sore throat",
+      "cough"
+    ],
+    "severity": "Low",
+    "description": "A common viral infection that affects your nose and throat. It usually clears up in a week.",
+    "advice": "Rest, stay hydrated, and use over-the-counter remedies for symptoms.",
+    "name_hi": "साधारण सर्दी-जुकाम",
+    "symptoms_hi": [
+      "बहती नाक",
+      "छींकना",
+      "गले में खराश",
+      "खांसी"
+    ],
+    "severity_hi": "कम",
+    "description_hi": "एक सामान्य संक्रमण जो आपकी नाक और गले को प्रभावित करता है। यह आमतौर पर एक सप्ताह में ठीक हो जाता है।",
+    "advice_hi": "आराम करें, खूब पानी पिएं और लक्षणों के लिए सामान्य दवाएं लें।",
+    "matchParams": [
+      "runny nose",
+      "sneezing",
+      "sore throat",
+      "cough"
+    ]
+  },
+  {
+    "name": "Flu (Influenza)",
+    "symptoms": [
+      "fever",
+      "chills",
+      "muscle aches",
+      "cough",
+      "fatigue"
+    ],
+    "severity": "Medium",
+    "description": "A viral infection that can make you feel very tired and achy. It is more severe than a cold.",
+    "advice": "Rest, drink plenty of fluids. See a doctor if symptoms are severe or persistent.",
+    "name_hi": "फ्लू (इन्फ्लूएंजा)",
+    "symptoms_hi": [
+      "बुखार",
+      "ठंड लगना",
+      "मांसपेशियों में दर्द",
+      "खांसी",
+      "थकान"
+    ],
+    "severity_hi": "मध्यम",
+    "description_hi": "एक वायरल संक्रमण जिससे आप बहुत थकान और दर्द महसूस कर सकते हैं। यह सर्दी से अधिक गंभीर होता है।",
+    "advice_hi": "आराम करें, बहुत सारे तरल पदार्थ पिएं। यदि लक्षण गंभीर हों तो डॉक्टर को दिखाएं।",
+    "matchParams": [
+      "fever",
+      "chills",
+      "muscle aches",
+      "cough",
+      "fatigue"
+    ]
+  },
+  {
+    "name": "Migraine",
+    "symptoms": [
+      "headache",
+      "nausea",
+      "sensitivity to light",
+      "throbbing pain"
+    ],
+    "severity": "Medium",
+    "description": "A severe headache that can cause throbbing pain and make you sensitive to light and sound.",
+    "advice": "Rest in a dark, quiet room. Over-the-counter pain relievers may help.",
+    "name_hi": "माइग्रेन (अधकपारी)",
+    "symptoms_hi": [
+      "सिरदर्द",
+      "जी मिचलाना",
+      "प्रकाश के प्रति संवेदनशीलता",
+      "तेज दर्द"
+    ],
+    "severity_hi": "मध्यम",
+    "description_hi": "एक गंभीर सिरदर्द जो तेज दर्द पैदा कर सकता है और आपको प्रकाश और ध्वनि के प्रति संवेदनशील बना सकता है।",
+    "advice_hi": "अंधेरे और शांत कमरे में आराम करें। दर्द निवारक दवाएं मदद कर सकती हैं।",
+    "matchParams": [
+      "headache",
+      "nausea",
+      "sensitivity to light",
+      "throbbing pain"
+    ]
+  },
+  {
+    "name": "Gastroenteritis (Stomach Flu)",
+    "symptoms": [
+      "nausea",
+      "vomiting",
+      "diarrhea",
+      "stomach cramps"
+    ],
+    "severity": "Medium",
+    "description": "An infection in your stomach that causes vomiting and diarrhea. It is often called the stomach flu.",
+    "advice": "Stay hydrated with water or electrolyte drinks. Eat bland foods like toast and rice.",
+    "name_hi": "पेट का संक्रमण (Gastroenteritis)",
+    "symptoms_hi": [
+      "जी मिचलाना",
+      "उल्टी",
+      "दस्त",
+      "पेट में ऐंठन"
+    ],
+    "severity_hi": "मध्यम",
+    "description_hi": "आपके पेट में एक संक्रमण जो उल्टी और दस्त का कारण बनता है। इसे अक्सर \"पेट का फ्लू\" कहा जाता है।",
+    "advice_hi": "पानी या ओआरएस (ORS) के साथ हाइड्रेटेड रहें। टोस्ट और चावल जैसा हल्का भोजन करें।",
+    "matchParams": [
+      "nausea",
+      "vomiting",
+      "diarrhea",
+      "stomach cramps"
+    ]
+  },
+  {
+    "name": "Heart Attack",
+    "symptoms": [
+      "chest pain",
+      "shortness of breath",
+      "pain in arm",
+      "nausea"
+    ],
+    "severity": "Critical",
+    "description": "A serious condition where blood flow to the heart is blocked. This is a medical emergency.",
+    "advice": "Call emergency services immediately. Do not drive yourself to the hospital.",
+    "name_hi": "दिल का दौरा (Heart Attack)",
+    "symptoms_hi": [
+      "सीने में दर्द",
+      "सांस लेने में तकलीफ",
+      "हाथ में दर्द",
+      "जी मिचलाना"
+    ],
+    "severity_hi": "गंभीर",
+    "description_hi": "एक गंभीर स्थिति जहां हृदय में रक्त का प्रवाह अवरुद्ध हो जाता है। यह एक मेडिकल इमरजेंसी है।",
+    "advice_hi": "तुरंत एम्बुलेंस बुलाएं। खुद गाड़ी चलाकर अस्पताल न जाएं।",
+    "matchParams": [
+      "chest pain",
+      "shortness of breath",
+      "pain in arm",
+      "nausea"
+    ]
+  }
+]
