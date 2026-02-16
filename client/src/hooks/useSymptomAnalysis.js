@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { analyzeSymptoms } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import api from '../services/api';
 
 const useSymptomAnalysis = () => {
     const [results, setResults] = useState([]);
@@ -39,7 +39,7 @@ const useSymptomAnalysis = () => {
             // Save to History if Logged In
             if (user && data.results && data.results.length > 0) {
                 try {
-                    await axios.post('http://localhost:5000/api/history', {
+                    await api.post('/history', {
                         symptoms: symptoms,
                         analysis: data.results
                     });

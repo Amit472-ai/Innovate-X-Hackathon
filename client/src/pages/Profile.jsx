@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import api from '../services/api';
 import Header from '../components/Header';
 
 const Profile = () => {
@@ -11,7 +11,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchHistory = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/history');
+                const res = await api.get('/history');
                 setHistory(res.data);
             } catch (err) {
                 console.error("Failed to fetch history:", err);
