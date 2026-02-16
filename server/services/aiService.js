@@ -150,41 +150,39 @@ class AIService {
 
     _buildPrompt(symptoms) {
         return `
-        You are a reliable medical assistant powered by AI. IMPORTANT: Only provide general information based on common symptoms. Do NOT diagnose or prescribe. Always prioritize user safety.
+You are a medical assistant. Provide concise, structured health guidance.
+Do NOT diagnose or prescribe definitively. Offer common knowledge suggestions.
 
-        User symptoms: "${symptoms.join(', ')}"
+User problem: "${symptoms.join(', ')}"
 
-        Tasks:
-        1. Identify UP TO 3 most likely common conditions (focus on everyday issues like cold, headache, indigestion – avoid rare diseases).
-        2. For EACH condition:
-           - Condition Name: Simple English name.
-           - Condition Hindi: Accurate Hindi translation.
-           - Severity: Low (मामूली), Medium (मध्यम), High (गंभीर), Critical (बहुत गंभीर) – base on symptom severity.
-           - Severity Hindi: Hindi translation.
-           - Description: Simplified explanation in English (like explaining to a 5-year-old) – max 50 words.
-           - Description Hindi: Same in simple Hindi.
-           - Advice: Practical home actions or when to seek help (English) – safe, evidence-based, max 50 words.
-           - Advice Hindi: Same in Hindi.
+Provide response ONLY in valid JSON format (Array of objects).
+Each object must have these exact fields:
+- condition: string (Name of condition)
+- severity: "Low" | "Medium" | "High" | "Critical"
+- description: string (Brief explanation, max 2 sentences)
+- medicines: array of strings (Proper OTC medicine names, e.g., "Paracetamol 500mg", "Ibuprofen 400mg")
+- precautions: array of strings (Safety measures to avoid worsening)
+- home_remedies: array of strings (Quick relief methods obtainable at home)
+- advice: string (When to see a doctor)
 
-        Response Rules:
-        - Output ONLY a valid JSON array (no extra text, markdown, or explanations).
-        - Ensure JSON is parseable and complete.
-        - If symptoms are unclear, suggest consulting a doctor as first condition.
+Example Output:
+[
+    {
+        "condition": "Tension Headache",
+        "severity": "Low",
+        "description": "Pain or discomfort in the head or scalp.",
+        "medicines": ["Paracetamol (Acetaminophen)", "Ibuprofen"],
+        "precautions": ["Avoid bright screens", "Rest in a dark room"],
+        "home_remedies": ["Cold compress on forehead", "Drink ginger tea"],
+        "advice": "Consult a doctor if headache is severe or persists."
+    }
+]
 
-        Format:
-        [
-            {
-                "condition": "Condition Name",
-                "condition_hi": "बीमारी का नाम",
-                "severity": "Low/Medium/High/Critical",
-                "severity_hi": "मामूली/मध्यम/गंभीर/बहुत गंभीर",
-                "description": "Simple English explanation.",
-                "description_hi": "सरल हिंदी व्याख्या।",
-                "advice": "Safe home advice.",
-                "advice_hi": "सुरक्षित घरेलू सलाह।"
-            }
-        ]
-        `;
+Rules:
+- Always include at least 1-2 items for medicines, precautions, and home_remedies.
+- Suggest only Over-The-Counter (OTC) medicines.
+- Output ONLY JSON.
+`;
     }
 
     _parseResponse(text) {
@@ -231,8 +229,14 @@ class AIService {
                 severity_hi: "मामूली",
                 description: "Body feels tired, like after a long day of play.",
                 description_hi: "शरीर थका हुआ लग रहा, जैसे लंबे दिन के खेल के बाद।",
-                advice: "Rest, eat healthy, drink water. See doctor if lasts >1 week.",
-                advice_hi: "आराम करें, स्वस्थ खाएं, पानी पिएं। अगर 1 हफ्ते से ज्यादा तो डॉक्टर जाएं।"
+                medicines: ["None"],
+                medicines_hi: ["कोई नहीं"],
+                precautions: ["Avoid overexertion", "Maintain regular sleep schedule"],
+                precautions_hi: ["अत्यधिक मेहनत से बचें", "नियमित नींद का पालन करें"],
+                home_remedies: ["Rest well", "Drink plenty of water", "Eat nutritious food"],
+                home_remedies_hi: ["अच्छी तरह आराम करें", "पर्याप्त पानी पिएं", "पौष्टिक भोजन करें"],
+                advice: "See doctor if fatigue lasts more than 1 week or worsens.",
+                advice_hi: "अगर थकान 1 हफ्ते से ज्यादा रहे या बढ़े तो डॉक्टर से मिलें।"
             }
         ];
 
@@ -246,8 +250,14 @@ class AIService {
                 severity_hi: "मामूली",
                 description: "Head hurts a bit, maybe from too much screen or no water. Like a grumpy brain hug.",
                 description_hi: "सिर थोड़ा दुख रहा, शायद स्क्रीन ज्यादा या पानी कम से। जैसे चिड़चिड़ा दिमाग का गले लगना।",
-                advice: "Drink water, rest in dark room. If persists >2 days, consult doctor.",
-                advice_hi: "पानी पिएं, अंधेरे कमरे में आराम करें। अगर 2 दिन से ज्यादा रहे तो डॉक्टर से मिलें।"
+                home_remedies: ["Drink water", "Rest in a quiet, dark room", "Apply a cool compress to forehead"],
+                home_remedies_hi: ["पानी पिएं", "शांत, अंधेरे कमरे में आराम करें", "माथे पर ठंडी पट्टी रखें"],
+                medicines: ["Paracetamol (if needed)"],
+                medicines_hi: ["पैरासिटामोल (यदि आवश्यक हो)"],
+                precautions: ["Limit screen time", "Avoid loud noises", "Do not skip meals"],
+                precautions_hi: ["स्क्रीन समय सीमित करें", "तेज आवाज़ से बचें", "भोजन न छोड़ें"],
+                advice: "Consult doctor if headache persists more than 2 days or is severe.",
+                advice_hi: "अगर सिरदर्द 2 दिन से ज्यादा रहे या तेज़ हो तो डॉक्टर से मिलें।"
             });
         }
 
@@ -259,8 +269,14 @@ class AIService {
                 severity_hi: "मध्यम",
                 description: "Body warm like a cozy blanket, but check temperature.",
                 description_hi: "शरीर गर्म लग रहा जैसे आरामदायक कंबल, लेकिन तापमान चेक करें।",
-                advice: "Cool compress, fluids. Seek doctor if >101°F or persists.",
-                advice_hi: "ठंडी सेंक, तरल पदार्थ। अगर 101°F से ज्यादा या बने रहें तो डॉक्टर जाएं।"
+                home_remedies: ["Cool compress on forehead", "Drink plenty of fluids", "Rest well"],
+                home_remedies_hi: ["माथे पर ठंडी पट्टी रखें", "पर्याप्त तरल पदार्थ पिएं", "अच्छी तरह आराम करें"],
+                medicines: ["Paracetamol (if temperature >100°F)"],
+                medicines_hi: ["पैरासिटामोल (अगर तापमान 100°F से ज्यादा हो)"],
+                precautions: ["Monitor temperature regularly", "Avoid heavy clothing", "Do not self-medicate with antibiotics"],
+                precautions_hi: ["तापमान नियमित जांचें", "भारी कपड़े न पहनें", "एंटीबायोटिक दवा खुद न लें"],
+                advice: "Seek doctor if fever >101°F, lasts more than 3 days, or with other severe symptoms.",
+                advice_hi: "अगर बुखार 101°F से ज्यादा हो, 3 दिन से ज्यादा रहे या अन्य गंभीर लक्षण हों तो डॉक्टर से मिलें।"
             });
         }
 
@@ -272,8 +288,14 @@ class AIService {
                 severity_hi: "मामूली",
                 description: "Throat tickles and you cough, like dust in the air.",
                 description_hi: "गला खुजली कर रहा और खांसी आ रही, जैसे हवा में धूल।",
-                advice: "Honey in warm water, steam. Doctor if with chest pain.",
-                advice_hi: "गर्म पानी में शहद, भाप लें। अगर छाती दर्द हो तो डॉक्टर जाएं।"
+                home_remedies: ["Honey in warm water (2-3 times/day)", "Steam inhalation", "Gargle with salt directly"],
+                home_remedies_hi: ["गर्म पानी में शहद (दिन में 2-3 बार)", "भाप लें", "नमक वाले पानी से गरारे करें"],
+                medicines: ["Dextromethorphan (for dry cough)", "Guaifenesin (for wet cough)"],
+                medicines_hi: ["डेक्सट्रोमेथोर्फन (सूखी खांसी के लिए)", "गुआइफेनेसिन (गीली खांसी के लिए)"],
+                precautions: ["Avoid cold drinks", "Do not smoke", "Cover mouth while coughing"],
+                precautions_hi: ["ठंडे पेय से बचें", "धूम्रपान न करें", "खांसते समय मुंह ढकें"],
+                advice: "See doctor if cough lasts more than 1 week or with chest pain.",
+                advice_hi: "अगर खांसी 1 हफ्ते से ज्यादा रहे या छाती में दर्द हो तो डॉक्टर से मिलें।"
             });
         }
 
@@ -285,8 +307,14 @@ class AIService {
                 severity_hi: "मध्यम",
                 description: "Tummy feels full and bubbly after eating wrong things.",
                 description_hi: "पेट भरा और उबाल जैसा लग रहा, गलत खाने से।",
-                advice: "Light food, ginger tea. Seek help if vomiting blood.",
-                advice_hi: "हल्का खाना, अदरक की चाय। अगर खून वाली उल्टी तो तुरंत डॉक्टर।"
+                home_remedies: ["Eat light, easily digestible food", "Drink ginger tea", "Avoid spicy foods"],
+                home_remedies_hi: ["हल्का, आसानी से पचने वाला खाना खाएं", "अदरक की चाय पिएं", "मसालेदार भोजन से बचें"],
+                medicines: ["Antacid (if needed)"],
+                medicines_hi: ["एंटासिड (यदि आवश्यक हो)"],
+                precautions: ["Eat slowly", "Do not lie down immediately after eating", "Avoid overeating"],
+                precautions_hi: ["धीरे-धीरे खाएं", "खाने के तुरंत बाद न लेटें", "अधिक न खाएं"],
+                advice: "Seek help if severe pain, blood in vomit, or symptoms persist.",
+                advice_hi: "अगर तेज़ दर्द, उल्टी में खून या लक्षण बने रहें तो डॉक्टर से मिलें।"
             });
         }
 
